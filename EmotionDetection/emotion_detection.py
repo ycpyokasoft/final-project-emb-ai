@@ -9,10 +9,20 @@ def emotion_detector(text_to_analyze):
     # Submit the JSON object and headers to the API and receive the response
     response = requests.post(url, json=myobj, headers=header)
 
+    emotion_dict = dict()
+
+    if response.status_code == 400:
+        emotion_dict['anger'] = None
+        emotion_dict['disgust'] = None
+        emotion_dict['fear'] = None
+        emotion_dict['joy'] = None
+        emotion_dict['sadness'] = None
+        emotion_dict['dominant_emotion'] = None
+        return emotion_dict
+
     # Extract the set of emotions
     output = json.loads(response.text)
     
-    emotion_dict = dict()
     emotion_dict['anger'] = float(output['emotionPredictions'][0]['emotion']['anger'])
     emotion_dict['disgust'] = float(output['emotionPredictions'][0]['emotion']['disgust'])
     emotion_dict['fear'] = float(output['emotionPredictions'][0]['emotion']['fear'])
